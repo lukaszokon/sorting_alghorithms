@@ -3,18 +3,22 @@ import datetime
 from random import randint
 import timeit
 
-sorted_list = []
-sorted_reverse_list = []
-random_list = []
+# sorted_list = []
+# sorted_reverse_list = []
+# random_list = []
 
 
 def prepare_data(n):
-    global sorted_list, sorted_reverse_list, random_list
+    sorted_list = []
+    sorted_reverse_list = []
+    random_list = []
     for i in range(n):
         liczba = randint(1, n * 100)
         random_list.append(liczba)
         bisect.insort(sorted_list, liczba)
         sorted_reverse_list = sorted_list[::-1]
+    return sorted_list, sorted_reverse_list, random_list
+
 
 
 def bubble_sort_1(list_to_sort):
@@ -28,7 +32,7 @@ def bubble_sort_1(list_to_sort):
 
 def bubble_sort_2(list_to_sort):
     laps = len(list_to_sort)
-    nums = len(list_to_sort) - 1
+    nums = laps - 1
     for lap in range(laps):
         for i in range(nums):
             if list_to_sort[i + 1] < list_to_sort[i]:
@@ -38,23 +42,38 @@ def bubble_sort_2(list_to_sort):
         nums -= 1
 
 
+def bubble_sort_3(list_to_sort):
+    laps = len(list_to_sort)
+    nums = laps - 1
+    for lap in range(laps):
+        was_change = False
+        for i in range(nums):
+            if list_to_sort[i + 1] < list_to_sort[i]:
+                temp = list_to_sort[i]
+                list_to_sort[i] = list_to_sort[i + 1]
+                list_to_sort[i + 1] = temp
+                was_change = True
+        if not was_change:
+            return
+        nums -= 1
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
 from __main__ import prepare_data, {name_of_sort_function}
-sorted_list = []
-sorted_reverse_list = []
-random_list = []
-prepare_data({n})
 """
 
     statement1 = f"""
-{name_of_sort_function}(sorted_list)    
+sorted_list, sorted_reverse_list, random_list = prepare_data({n})
+{name_of_sort_function}(sorted_list)   
 """
     statement2 = f"""
+sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 {name_of_sort_function}(sorted_reverse_list)    
 """
     statement3 = f"""
+sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 {name_of_sort_function}(random_list)    
 """
     t1 = timeit.timeit(stmt=statement1, setup=setup, number=ilosc_testow)
@@ -67,5 +86,6 @@ prepare_data({n})
 
 
 if __name__ == '__main__':
-    sorting_test('bubble_sort_1', 10000)
-    sorting_test('bubble_sort_2', 10000)
+    sorting_test('bubble_sort_1', 1000, 10)
+    sorting_test('bubble_sort_2', 1000, 10)
+    sorting_test('bubble_sort_3', 1000, 10)
