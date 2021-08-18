@@ -79,6 +79,17 @@ def bubble_sort_4(list_to_sort):
         nums -= 1
 
 
+def insert_sort(list_to_sort):
+    nums = len(list_to_sort)
+    for i in range(1, nums):
+        value = list_to_sort[i]
+        before_index = i - 1
+        while before_index >= 0 and value < list_to_sort[before_index]:
+            list_to_sort[before_index + 1] = list_to_sort[before_index]
+            before_index -= 1
+        list_to_sort[before_index + 1] = value
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
@@ -107,7 +118,8 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 
 
 if __name__ == '__main__':
-    sorting_test('bubble_sort_1', 1000, 10)
-    sorting_test('bubble_sort_2', 1000, 10)
-    sorting_test('bubble_sort_3', 1000, 10)
+    # sorting_test('bubble_sort_1', 1000, 10)
+    # sorting_test('bubble_sort_2', 1000, 10)
+    # sorting_test('bubble_sort_3', 1000, 10)
     sorting_test('bubble_sort_4', 1000, 10)
+    sorting_test('insert_sort', 1000, 10)
