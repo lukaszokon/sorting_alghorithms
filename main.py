@@ -3,6 +3,7 @@ import datetime
 from random import randint
 import timeit
 
+
 # sorted_list = []
 # sorted_reverse_list = []
 # random_list = []
@@ -18,7 +19,6 @@ def prepare_data(n):
         bisect.insort(sorted_list, liczba)
         sorted_reverse_list = sorted_list[::-1]
     return sorted_list, sorted_reverse_list, random_list
-
 
 
 def bubble_sort_1(list_to_sort):
@@ -58,6 +58,27 @@ def bubble_sort_3(list_to_sort):
         nums -= 1
 
 
+def bubble_sort_4(list_to_sort):
+    laps = len(list_to_sort)
+    nums = laps - 1
+    start_index = 0
+    for lap in range(laps):
+        was_change = False
+        for i in range(start_index, nums):
+            if list_to_sort[i + 1] < list_to_sort[i]:
+                temp = list_to_sort[i]
+                list_to_sort[i] = list_to_sort[i + 1]
+                list_to_sort[i + 1] = temp
+                if not was_change:
+                    was_change = True
+                    start_index = i - 1
+                    if start_index < 0:
+                        start_index = 0
+        if not was_change:
+            return
+        nums -= 1
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
@@ -89,3 +110,4 @@ if __name__ == '__main__':
     sorting_test('bubble_sort_1', 1000, 10)
     sorting_test('bubble_sort_2', 1000, 10)
     sorting_test('bubble_sort_3', 1000, 10)
+    sorting_test('bubble_sort_4', 1000, 10)
