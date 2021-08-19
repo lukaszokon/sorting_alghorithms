@@ -90,6 +90,32 @@ def insert_sort(list_to_sort):
         list_to_sort[before_index + 1] = value
 
 
+def merge_sort_prepare(list_to_sort):
+    number_of_nums = len(list_to_sort)
+    temp = [None] * number_of_nums
+    merge_sort(0, number_of_nums-1, list_to_sort, temp)
+
+
+def merge_sort(start_index, end_index, list_to_sort, temp_list):
+    middle_index = (start_index + end_index + 1) // 2
+    if middle_index - start_index > 1:
+        merge_sort(start_index, middle_index - 1, list_to_sort, temp_list)
+    if end_index - middle_index > 0:
+        merge_sort(middle_index, end_index, list_to_sort, temp_list)
+    first_iterator = start_index
+    second_iterator = middle_index
+    for i in range(start_index, end_index + 1):
+        if (first_iterator == middle_index) or (
+                (second_iterator <= end_index) and list_to_sort[first_iterator] > list_to_sort[second_iterator]):
+            temp_list[i] = list_to_sort[second_iterator]
+            second_iterator += 1
+        else:
+            temp_list[i] = list_to_sort[first_iterator]
+            first_iterator += 1
+    for i in range(start_index, end_index + 1):
+        list_to_sort[i] = temp_list[i]
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
@@ -118,8 +144,11 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 
 
 if __name__ == '__main__':
+    lista = [5, 19, 4, 3, 2, 10 ,12]
+    merge_sort_prepare(lista)
+    print(lista)
     # sorting_test('bubble_sort_1', 1000, 10)
     # sorting_test('bubble_sort_2', 1000, 10)
     # sorting_test('bubble_sort_3', 1000, 10)
-    sorting_test('bubble_sort_4', 1000, 10)
-    sorting_test('insert_sort', 1000, 10)
+    # sorting_test('bubble_sort_4', 1000, 10)
+    # sorting_test('insert_sort', 1000, 10)
