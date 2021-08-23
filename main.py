@@ -130,6 +130,39 @@ def merge_sort(start_index, end_index, list_to_sort, temp_list):
         list_to_sort[i] = temp_list[i]
 
 
+def prepare_quick_sort(list_to_sort):
+    quick_sort(0, len(list_to_sort) - 1, list_to_sort)
+
+
+def default_sort_function(list_to_sort):
+    list_to_sort.sort()
+
+
+def quick_sort(left_index, right_index, list_to_sort):
+    if right_index <= left_index:
+        return
+
+    i = left_index
+    j = right_index
+    pivot = list_to_sort[(left_index + right_index) // 2]
+
+    while True:
+        while pivot > list_to_sort[i]:
+            i += 1
+        while pivot < list_to_sort[j]:
+            j -= 1
+        if i <= j:
+            list_to_sort[i], list_to_sort[j] = list_to_sort[j], list_to_sort[i]
+            i += 1
+            j -= 1
+        else:
+            break
+    if j > left_index:
+        quick_sort(left_index, j, list_to_sort)
+    if i < right_index:
+        quick_sort(i, right_index, list_to_sort)
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
@@ -158,13 +191,15 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 
 
 if __name__ == '__main__':
-    lista = [9, 2, 3, 5, 4, 3]
-    select_sort(lista)
-    print(lista)
+    # lista = [9, 2, 3, 5, 4, 7]
+    # default_sort_function(lista)
+    # print(lista)
     # sorting_test('bubble_sort_1', 1000, 10)
     # sorting_test('bubble_sort_2', 1000, 10)
     # sorting_test('bubble_sort_3', 1000, 10)
     # sorting_test('bubble_sort_4', 1000, 10)
     # sorting_test('insert_sort', 1000, 10)
-    # sorting_test('merge_sort_prepare', 1000, 10)
+    sorting_test('default_sort_function', 100000, 1)
+    sorting_test('merge_sort_prepare', 100000, 1)
     # sorting_test('select_sort', 1000, 10)
+    sorting_test('prepare_quick_sort', 100000, 1)
