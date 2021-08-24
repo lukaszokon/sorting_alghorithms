@@ -163,6 +163,18 @@ def quick_sort(left_index, right_index, list_to_sort):
         quick_sort(i, right_index, list_to_sort)
 
 
+from heapq import heappush, heappop
+
+
+def heapsort(list_to_sort):
+    h = []
+    for value in list_to_sort:
+        heappush(h, value)
+    list_to_sort.clear()
+    for i in range(len(h)):
+        list_to_sort.append(heappop(h))
+
+
 def sorting_test(name_of_sort_function, n, ilosc_testow=100):
     print(f'Sortowanie listy {n} liczb za pomocą: {name_of_sort_function}')
     setup = f"""
@@ -191,15 +203,13 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 
 
 if __name__ == '__main__':
-    # lista = [9, 2, 3, 5, 4, 7]
-    # default_sort_function(lista)
-    # print(lista)
     # sorting_test('bubble_sort_1', 1000, 10)
     # sorting_test('bubble_sort_2', 1000, 10)
     # sorting_test('bubble_sort_3', 1000, 10)
     # sorting_test('bubble_sort_4', 1000, 10)
     # sorting_test('insert_sort', 1000, 10)
-    sorting_test('default_sort_function', 100000, 1)
-    sorting_test('merge_sort_prepare', 100000, 1)
+    # sorting_test('default_sort_function', 1000, 100)
+    sorting_test('merge_sort_prepare', 1000, 100)
     # sorting_test('select_sort', 1000, 10)
-    sorting_test('prepare_quick_sort', 100000, 1)
+    sorting_test('prepare_quick_sort', 1000, 100)
+    sorting_test('heapsort', 1000, 100)
