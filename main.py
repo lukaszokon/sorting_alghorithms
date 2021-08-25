@@ -163,6 +163,56 @@ def quick_sort(left_index, right_index, list_to_sort):
         quick_sort(i, right_index, list_to_sort)
 
 
+import multiprocessing
+
+
+def prepare_multiprocessing_quick_sort(list_to_sort):
+    multiprocessing_quick_sort(0, len(list_to_sort) - 1, list_to_sort, 2, 0)
+
+
+def multiprocessing_quick_sort(left_index, right_index, list_to_sort, depth, threads_created):
+    if right_index <= left_index:
+        return
+
+    i = left_index
+    j = right_index
+    pivot = list_to_sort[(left_index + right_index) // 2]
+
+    while True:
+        while pivot > list_to_sort[i]:
+            i += 1
+        while pivot < list_to_sort[j]:
+            j -= 1
+        if i <= j:
+            list_to_sort[i], list_to_sort[j] = list_to_sort[j], list_to_sort[i]
+            i += 1
+            j -= 1
+        else:
+            break
+
+    process_1 = None
+    process_2 = None
+
+    if j > left_index:
+        if threads_created < depth:
+            process_1 = multiprocessing.Process(target=multiprocessing_quick_sort,
+                                                args=(left_index, j, list_to_sort, depth, threads_created+1))
+            process_1.start()
+        else:
+            multiprocessing_quick_sort(left_index, j, list_to_sort,depth, threads_created)
+    if i < right_index:
+        if threads_created < depth:
+            process_2 = multiprocessing.Process(target=multiprocessing_quick_sort,
+                                                args=(i, right_index, list_to_sort, depth, threads_created+1))
+            process_2.start()
+        else:
+            multiprocessing_quick_sort(i, right_index, list_to_sort, depth, threads_created)
+    if process_1:
+        process_1.join()
+    if process_2:
+        process_2.join()
+
+
 from heapq import heappush, heappop
 
 
@@ -203,13 +253,17 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
 
 
 if __name__ == '__main__':
+    # lista = [5, 6, 3, 4, 5, 3, 11, 9]
+    # prepare_multiprocessing_quick_sort(lista)
+    # print(lista)
     # sorting_test('bubble_sort_1', 1000, 10)
     # sorting_test('bubble_sort_2', 1000, 10)
     # sorting_test('bubble_sort_3', 1000, 10)
     # sorting_test('bubble_sort_4', 1000, 10)
     # sorting_test('insert_sort', 1000, 10)
     # sorting_test('default_sort_function', 1000, 100)
-    sorting_test('merge_sort_prepare', 1000, 100)
+    # sorting_test('merge_sort_prepare', 1000, 100)
     # sorting_test('select_sort', 1000, 10)
-    sorting_test('prepare_quick_sort', 1000, 100)
-    sorting_test('heapsort', 1000, 100)
+    # sorting_test('prepare_quick_sort', 10000, 1)
+    # sorting_test('heapsort', 1000, 100)
+    sorting_test('prepare_multiprocessing_quick_sort', 100000, 1)
