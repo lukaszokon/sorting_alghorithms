@@ -196,14 +196,14 @@ def multiprocessing_quick_sort(left_index, right_index, list_to_sort, depth, thr
     if j > left_index:
         if threads_created < depth:
             process_1 = multiprocessing.Process(target=multiprocessing_quick_sort,
-                                                args=(left_index, j, list_to_sort, depth, threads_created+1))
+                                                args=(left_index, j, list_to_sort, depth, threads_created + 1))
             process_1.start()
         else:
-            multiprocessing_quick_sort(left_index, j, list_to_sort,depth, threads_created)
+            multiprocessing_quick_sort(left_index, j, list_to_sort, depth, threads_created)
     if i < right_index:
         if threads_created < depth:
             process_2 = multiprocessing.Process(target=multiprocessing_quick_sort,
-                                                args=(i, right_index, list_to_sort, depth, threads_created+1))
+                                                args=(i, right_index, list_to_sort, depth, threads_created + 1))
             process_2.start()
         else:
             multiprocessing_quick_sort(i, right_index, list_to_sort, depth, threads_created)
@@ -252,7 +252,41 @@ sorted_list, sorted_reverse_list, random_list = prepare_data({n})
     print()
 
 
+def cezar_cipher(string_to_code, step):
+    alphabet = 'aąbcćdeęfghijklłmnńoóprsśtuwxyzżź'
+    alphabet_n = len(alphabet)
+    alphabet_upper = alphabet.upper()
+    numeric = '0123456789'
+    numeric_n = len(numeric)
+
+    new_string = ''
+    for letter in string_to_code:
+        if letter.isalpha():
+            if letter.isupper():
+                index = alphabet_upper.index(letter)
+                new_string += alphabet[(index + step) % alphabet_n]
+            else:
+                index = alphabet.index(letter)
+                new_string += alphabet_upper[(index + step) % alphabet_n]
+        elif letter.isdigit():
+            index = numeric.index(letter)
+            new_string += numeric[(index + step) % numeric_n]
+        else:
+            new_string += letter
+
+    return new_string
+
+
+def cezar_decipher(string_to_code, step):
+    new_string = cezar_cipher(string_to_code, -step)
+    return new_string
+
+
 if __name__ == '__main__':
+    text = cezar_cipher('Ala miała kota, ale już go nie ma niestety. Za to ma 3 psy.', 3)
+    print(text)
+    text = cezar_decipher(text, 3)
+    print(text)
     # lista = [5, 6, 3, 4, 5, 3, 11, 9]
     # prepare_multiprocessing_quick_sort(lista)
     # print(lista)
@@ -266,4 +300,4 @@ if __name__ == '__main__':
     # sorting_test('select_sort', 1000, 10)
     # sorting_test('prepare_quick_sort', 10000, 1)
     # sorting_test('heapsort', 1000, 100)
-    sorting_test('prepare_multiprocessing_quick_sort', 100000, 1)
+    # sorting_test('prepare_multiprocessing_quick_sort', 100000, 1)
